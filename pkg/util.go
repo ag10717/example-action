@@ -20,3 +20,11 @@ func StringContains(baseValue string, values []string) bool {
 
 	return false
 }
+
+func GetBuildType(branchName string) string {
+	if strings.Contains(branchName, "main") {
+		return "release"
+	}
+
+	return "feature"
+}

@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -9,13 +10,14 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 )
 
-type GitHandler struct {
+type Handler struct {
 	Repo              *git.Repository
 	BranchNameInput   string
 	MajorVersionInput string
 }
 
-func (gh *GitHandler) IncrementTag(tag string) string {
+func (h *Handler) IncrementBuild(tag, run_id string) string {
+	buildType := GetBuildType(h.BranchNameInput)
 	o := strings.Split(tag, ".")
 	// convert to ints
 	major, err := strconv.Atoi(o[0])
@@ -25,27 +27,31 @@ func (gh *GitHandler) IncrementTag(tag string) string {
 	patch, err := strconv.Atoi(o[2])
 	HandleError(err)
 
-	if gh.BranchNameInput == "main" {
+	if h.BranchNameInput == "main" {
 		major = major + 1
 		minor = 0
 		patch = 0
-	} else if StringContains(gh.BranchNameInput, []string{"feature", "task", "bugfix"}) {
+	} else if StringContains(h.BranchNameInput, []string{"feature", "task", "bugfix"}) {
 		minor = minor + 1
 	} else {
 		patch = patch + 1
 	}
 
-	newTag := fmt.Sprintf("%d.%d.%d", major, minor, patch)
+	buildNumber := fmt.Sprintf("%d.%d.%d", major, minor, patch)
 
-	fmt.Printf("incrementing tag too: %s", newTag)
-	return newTag
+	if buildType == "feature" {
+		buildNumber = fmt.Sprintf("%s.%s", buildNumber, fmt.Sprintf("PREVIEW-%s", run_id))
+	}
+
+	fmt.Printf("incrementing tag too: %s", buildNumber)
+	return buildNumber
 }
 
-func (gh *GitHandler) SetTag(tag string) {
-	head, err := gh.Repo.Head()
+func (h *Handler) SetTag(tag string) {
+	head, err := h.Repo.Head()
 	HandleError(err)
 
-	_, err = gh.Repo.CreateTag(tag, head.Hash(), &git.CreateTagOptions{
+	_, err = h.Repo.CreateTag(tag, head.Hash(), &git.CreateTagOptions{
 		Message: tag,
 	})
 
@@ -53,17 +59,17 @@ func (gh *GitHandler) SetTag(tag string) {
 }
 
 // see example: https://github.com/go-git/go-git/blob/master/_examples/find-if-any-tag-point-head/main.go
-func (gh *GitHandler) GetLatestTag() string {
+func (h *Handler) GetLatestBuild() string {
 	var latestTag string
 
-	ref, err := gh.Repo.Head()
+	ref, err := h.Repo.Head()
 	HandleError(err)
 
-	tags, err := gh.Repo.Tags()
+	tags, err := h.Repo.Tags()
 	HandleError(err)
 
 	err = tags.ForEach(func(t *plumbing.Reference) error {
-		revHash, err := gh.Repo.ResolveRevision(plumbing.Revision(t.Name()))
+		revHash, err := h.Repo.ResolveRevision(plumbing.Revision(t.Name()))
 		HandleError(err)
 
 		if *revHash == ref.Hash() {
@@ -76,4 +82,13 @@ func (gh *GitHandler) GetLatestTag() string {
 
 	fmt.Printf("found latest tag: %s", latestTag)
 	return latestTag
+}
+
+func (h *Handler) PushTag() {}
+func (h *Handler) GetBuildEnv() string {
+	if os.Getenv("BUILD_NUMBER") != "" {
+		return os.Getenv("BUILD_NUMBER")
+	}
+
+	return ""
 }

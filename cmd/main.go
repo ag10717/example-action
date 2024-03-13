@@ -14,16 +14,16 @@ func main() {
 
 	fmt.Println(os.Args[1:])
 
-	fmt.Printf("Hello, Example-Action; %s: %s \n", os.Args[1], os.Args[2])
+	fmt.Printf("Hello, Example-Action; %s: %s \n", os.Getenv("GITHUB_REF"), os.Args[2])
 	fmt.Printf("Current Directory: %s \n", wd)
 
 	r, err := git.PlainOpen(wd)
 	pkg.HandleError(err)
 
 	// SETUP REPO
-	gh := pkg.GitHandler{
+	gh := pkg.Handler{
 		Repo:              r,
-		BranchNameInput:   os.Args[1],
+		BranchNameInput:   os.Getenv("GITHUB_REF"),
 		MajorVersionInput: os.Args[2],
 	}
 
@@ -32,8 +32,22 @@ func main() {
 	})
 
 	// GET & SET TAG
-	lt := gh.GetLatestTag()
-	gh.IncrementTag(lt)
+	var bn string
 
-	// gh.SetTag(it)
+	// check if the build number has already be injected into the container
+	// this might happen if you run this action without create_tag; and then run it again with create_tag
+	bn = gh.GetBuildEnv()
+	pkg.HandleError(err)
+
+	if bn == "" {
+		bn = gh.GetLatestBuild()
+		gh.IncrementBuild(bn, os.Getenv("GITHUB_RUN_ID"))
+
+		os.Setenv("GITHUB_ENV", fmt.Sprintf("BUILD_NUMBER=%s", bn))
+	}
+
+	// if os.Args[1] == "true" {
+	// 	// gh.SetTag(bn)
+	// 	// gh.PushTag()
+	// }
 }

@@ -61,3 +61,20 @@ The general flow of this action should be:
   - increment the `minor_version`
 - if the source branch is any other 
   - increment the `patch_version`
+
+### Usage
+
+The usage of the aciton would be as follows:
+
+```yaml
+...
+  - name: Build Version Number
+    uses: ag10717/example-action@v1
+
+  - name: Create Git Tag
+    uses: ag10717/example-action@v1
+    with:
+      create_tag: true
+```
+
+When using the option of `create_tag` we would check there is env variable for the `BUILD_NUMBER` that might exist beforehand.

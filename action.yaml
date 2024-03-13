@@ -2,9 +2,10 @@ name: "example-action"
 description: "An example of building github actions with Go"
 
 inputs:
-  branch_name: 
-    required: true
-    description: "The name of the branch calling the action"
+  create_tag:
+    required: false
+    description: "Whether this action will create a tag"
+    default: "false"
 
   major_version: 
     required: true
@@ -15,5 +16,5 @@ runs:
   using: docker
   image: Dockerfile
   args:
-    - ${{ inputs.branch_name }}
+    - ${{ inputs.create_tag}}
     - ${{ inputs.major_version}}
