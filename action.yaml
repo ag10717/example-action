@@ -1,0 +1,5 @@
+name: "example-action"
+description: "An example of building github actions with Go"
+runs:
+  using: docker
+  image: Dockerfile
