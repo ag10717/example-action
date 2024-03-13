@@ -10,7 +10,7 @@ import (
 
 func main() {
 	wd, err := os.Getwd()
-	pkg.HandleError(err)
+	pkg.HandleError(err, "get cwd")
 
 	fmt.Println(os.Args[1:])
 
@@ -18,7 +18,7 @@ func main() {
 	fmt.Printf("Current Directory: %s \n", wd)
 
 	r, err := git.PlainOpen(wd)
-	pkg.HandleError(err)
+	pkg.HandleError(err, "open repo")
 
 	// SETUP REPO
 	gh := pkg.Handler{
@@ -37,7 +37,7 @@ func main() {
 	// check if the build number has already be injected into the container
 	// this might happen if you run this action without create_tag; and then run it again with create_tag
 	bn = gh.GetBuildEnv()
-	pkg.HandleError(err)
+	pkg.HandleError(err, "get build env")
 
 	if bn == "" {
 		bn = gh.GetLatestBuild()

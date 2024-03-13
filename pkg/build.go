@@ -21,11 +21,11 @@ func (h *Handler) IncrementBuild(tag, run_id string) string {
 	o := strings.Split(tag, ".")
 	// convert to ints
 	major, err := strconv.Atoi(o[0])
-	HandleError(err)
+	HandleError(err, "major convert")
 	minor, err := strconv.Atoi(o[1])
-	HandleError(err)
+	HandleError(err, "minor convert")
 	patch, err := strconv.Atoi(o[2])
-	HandleError(err)
+	HandleError(err, "patch convert")
 
 	if h.BranchNameInput == "main" {
 		major = major + 1
@@ -49,13 +49,13 @@ func (h *Handler) IncrementBuild(tag, run_id string) string {
 
 func (h *Handler) SetTag(tag string) {
 	head, err := h.Repo.Head()
-	HandleError(err)
+	HandleError(err, "get head")
 
 	_, err = h.Repo.CreateTag(tag, head.Hash(), &git.CreateTagOptions{
 		Message: tag,
 	})
 
-	HandleError(err)
+	HandleError(err, "create tag")
 }
 
 // see example: https://github.com/go-git/go-git/blob/master/_examples/find-if-any-tag-point-head/main.go
@@ -63,14 +63,14 @@ func (h *Handler) GetLatestBuild() string {
 	var latestTag string
 
 	ref, err := h.Repo.Head()
-	HandleError(err)
+	HandleError(err, "get head")
 
 	tags, err := h.Repo.Tags()
-	HandleError(err)
+	HandleError(err, "get tags")
 
 	err = tags.ForEach(func(t *plumbing.Reference) error {
 		revHash, err := h.Repo.ResolveRevision(plumbing.Revision(t.Name()))
-		HandleError(err)
+		HandleError(err, fmt.Sprintf("resolve revision: %s", t.Name()))
 
 		if *revHash == ref.Hash() {
 			latestTag = t.Name().Short()
@@ -78,7 +78,7 @@ func (h *Handler) GetLatestBuild() string {
 
 		return nil
 	})
-	HandleError(err)
+	HandleError(err, "tag iter")
 
 	fmt.Printf("found latest tag: %s", latestTag)
 	return latestTag

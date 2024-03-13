@@ -1,13 +1,14 @@
 package pkg
 
 import (
+	"fmt"
 	"log"
 	"strings"
 )
 
-func HandleError(err error) {
+func HandleError(err error, message string) {
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln(fmt.Sprintf("%s \n %v", message, err))
 	}
 }
 
