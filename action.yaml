@@ -1,5 +1,19 @@
 name: "example-action"
 description: "An example of building github actions with Go"
+
+inputs:
+  branch_name: 
+    required: true
+    description: "The name of the branch calling the action"
+
+  major_version: 
+    required: true
+    description: "The name of the branch calling the action"
+    default: "1"
+
 runs:
   using: docker
   image: Dockerfile
+  args:
+    - ${{ inputs.branch_name }}
+    - ${{ inputs.major_version}}
