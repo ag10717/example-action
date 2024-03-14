@@ -17,13 +17,6 @@ func main() {
 	fmt.Printf("Hello, Example-Action; %s: %s \n", os.Getenv("GITHUB_REF"), os.Args[2])
 	fmt.Printf("Current Directory: %s \n", wd)
 
-	files, err := os.ReadDir(wd)
-	pkg.HandleError(err, "read dir")
-
-	for _, file := range files {
-		fmt.Println(file.Name())
-	}
-
 	r, err := git.PlainOpen(wd)
 	pkg.HandleError(err, "open repo")
 
@@ -34,10 +27,9 @@ func main() {
 		MajorVersionInput: os.Args[2],
 	}
 
-	err = gh.Repo.Fetch(&git.FetchOptions{
-		Tags: git.AllTags,
-	})
-	pkg.HandleError(err, "fetch tags")
+	rem, err := gh.Repo.Remote("origin")
+	pkg.HandleError(err, "get remote")
+	fmt.Println(rem.Config().URLs)
 
 	// GET & SET TAG
 	var bn string
