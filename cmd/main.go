@@ -27,6 +27,11 @@ func main() {
 		MajorVersionInput: os.Args[2],
 	}
 
+	// print vars
+	for _, e := range os.Environ() {
+		fmt.Println(e)
+	}
+
 	// GET & SET TAG
 	var bn string
 
