@@ -93,13 +93,13 @@ func (h *Handler) getTags() []*version.Version {
 
 		return nil
 	})
+	HandleError(err, "tag iter")
+
 	versions := make([]*version.Version, len(at))
 	for i, r := range at {
 		v, _ := version.NewVersion(r)
 		versions[i] = v
 	}
-	HandleError(err, "tag iter")
-
 	sort.Sort(sort.Reverse(version.Collection(versions)))
 
 	fmt.Printf("have versions: %v \n", versions)

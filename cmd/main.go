@@ -17,6 +17,13 @@ func main() {
 	fmt.Printf("Hello, Example-Action; %s: %s \n", os.Getenv("GITHUB_REF"), os.Args[2])
 	fmt.Printf("Current Directory: %s \n", wd)
 
+	files, err := os.ReadDir(wd)
+	pkg.HandleError(err, "read dir")
+
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
+
 	r, err := git.PlainOpen(wd)
 	pkg.HandleError(err, "open repo")
 
