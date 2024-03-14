@@ -12,6 +12,11 @@ inputs:
     description: "The name of the branch calling the action"
     default: "1"
 
+  token:
+    required: false
+    description: "The token to use for the push action"
+    default: ${{ github.token}}
+
 runs:
   using: docker
   image: Dockerfile

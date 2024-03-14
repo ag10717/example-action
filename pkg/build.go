@@ -87,7 +87,7 @@ func (h *Handler) PushTag(tag string) {
 		RefSpecs:   []config.RefSpec{"refs/tags/*:refs/tags/*"},
 		Auth: &http.BasicAuth{
 			Username: "github-action",
-			Password: os.Getenv("GITHUB_TOKEN"),
+			Password: os.Args[3],
 		},
 	}
 
