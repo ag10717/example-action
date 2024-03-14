@@ -74,6 +74,10 @@ func (h *Handler) PushTag() {}
 func (h *Handler) GetBuildEnv() string {
 	fmt.Println("check existing build number")
 
+	fmt.Println(os.Environ())
+	fmt.Println(os.Getenv("GITHUB_ENV"))
+	fmt.Println(os.Getenv("BUILD_NUMBER"))
+
 	if os.Getenv("BUILD_NUMBER") != "" {
 		return os.Getenv("BUILD_NUMBER")
 	}
