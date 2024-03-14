@@ -25,12 +25,6 @@ func main() {
 		Repo:              r,
 		BranchNameInput:   os.Getenv("GITHUB_REF"),
 		MajorVersionInput: os.Args[2],
-		Token:             os.Args[3],
-	}
-
-	// print vars
-	for _, e := range os.Environ() {
-		fmt.Println(e)
 	}
 
 	// GET & SET TAG
