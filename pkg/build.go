@@ -61,9 +61,8 @@ func (h *Handler) SetTag(tag string) {
 	HandleError(err, "create tag")
 }
 
-// see example: https://github.com/go-git/go-git/blob/master/_examples/find-if-any-tag-point-head/main.go
 func (h *Handler) GetLatestBuild() string {
-	tags := h.GetTags()
+	tags := h.getTags()
 
 	latestTag := tags[0].String()
 
@@ -82,7 +81,7 @@ func (h *Handler) GetBuildEnv() string {
 	return ""
 }
 
-func (h *Handler) GetTags() []*version.Version {
+func (h *Handler) getTags() []*version.Version {
 	fmt.Println("get all tags")
 	var at []string
 
@@ -102,5 +101,7 @@ func (h *Handler) GetTags() []*version.Version {
 	HandleError(err, "tag iter")
 
 	sort.Sort(sort.Reverse(version.Collection(versions)))
+
+	fmt.Printf("have versions: %v \n", versions)
 	return versions
 }
