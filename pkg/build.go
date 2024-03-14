@@ -3,11 +3,13 @@ package pkg
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/hashicorp/go-version"
 )
 
 type Handler struct {
@@ -17,6 +19,7 @@ type Handler struct {
 }
 
 func (h *Handler) IncrementBuild(tag, run_id string) string {
+	fmt.Println("increment build number")
 	buildType := GetBuildType(h.BranchNameInput)
 	o := strings.Split(tag, ".")
 	// convert to ints
@@ -60,35 +63,44 @@ func (h *Handler) SetTag(tag string) {
 
 // see example: https://github.com/go-git/go-git/blob/master/_examples/find-if-any-tag-point-head/main.go
 func (h *Handler) GetLatestBuild() string {
-	var latestTag string
+	tags := h.GetTags()
 
-	ref, err := h.Repo.Head()
-	HandleError(err, "get head")
+	latestTag := tags[0].String()
 
-	tags, err := h.Repo.Tags()
-	HandleError(err, "get tags")
-
-	err = tags.ForEach(func(t *plumbing.Reference) error {
-		revHash, err := h.Repo.ResolveRevision(plumbing.Revision(t.Name()))
-		HandleError(err, fmt.Sprintf("resolve revision: %s", t.Name()))
-
-		if *revHash == ref.Hash() {
-			latestTag = t.Name().Short()
-		}
-
-		return nil
-	})
-	HandleError(err, "tag iter")
-
-	fmt.Printf("found latest tag: %s", latestTag)
+	fmt.Printf("found latest tag: %s \n", latestTag)
 	return latestTag
 }
 
 func (h *Handler) PushTag() {}
 func (h *Handler) GetBuildEnv() string {
+	fmt.Println("check existing build number")
+
 	if os.Getenv("BUILD_NUMBER") != "" {
 		return os.Getenv("BUILD_NUMBER")
 	}
 
 	return ""
+}
+
+func (h *Handler) GetTags() []*version.Version {
+	fmt.Println("get all tags")
+	var at []string
+
+	tags, err := h.Repo.Tags()
+	HandleError(err, "get tags")
+
+	err = tags.ForEach(func(t *plumbing.Reference) error {
+		at = append(at, t.Name().Short())
+
+		return nil
+	})
+	versions := make([]*version.Version, len(at))
+	for i, r := range at {
+		v, _ := version.NewVersion(r)
+		versions[i] = v
+	}
+	HandleError(err, "tag iter")
+
+	sort.Sort(sort.Reverse(version.Collection(versions)))
+	return versions
 }
