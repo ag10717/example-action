@@ -45,7 +45,8 @@ func main() {
 
 		// os.Setenv("GITHUB_ENV", fmt.Sprintf("BUILD_NUMBER=%s", bn))
 		// fmt.Printf("%s=%s", "BUILD_NUMBER", bn)
-		fmt.Printf("\"%s=%s\" >> $GITHUB_OUTPUT", "build_number", bn)
+		fmt.Printf("%s=%s", "build_number", bn)
+		pkg.WriteGithubEnvValue("BUILD_NUMBER", bn)
 	}
 
 	// if os.Args[1] == "true" {

@@ -1,7 +1,9 @@
 package pkg
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -27,4 +29,15 @@ func GetBuildType(branchName string) string {
 	}
 
 	return "feature"
+}
+
+func WriteGithubEnvValue(name, value string) {
+	filePath := os.Getenv("GITHUB_ENV")
+
+	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	HandleError(err, "open file")
+
+	defer f.Close()
+
+	fmt.Fprintf(f, "%s=%s \n", name, value)
 }
