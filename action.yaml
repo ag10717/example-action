@@ -12,14 +12,9 @@ inputs:
     description: "The name of the branch calling the action"
     default: "1"
 
-  build_number:
-    required: false
-    description: "The build number of the package"
-
 runs:
   using: docker
   image: Dockerfile
   args:
     - ${{ inputs.create_tag }}
     - ${{ inputs.major_version }}
-    - ${{ inputs.build_number }}

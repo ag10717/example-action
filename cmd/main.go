@@ -47,8 +47,8 @@ func main() {
 		pkg.WriteGithubEnvValue("BUILD_NUMBER", ib)
 	}
 
-	// if os.Args[1] == "true" {
-	// 	// gh.SetTag(ib)
-	// 	// gh.PushTag()
-	// }
+	if os.Args[1] == "true" {
+		gh.SetTag(ib)
+		gh.PushTag()
+	}
 }
