@@ -74,18 +74,7 @@ func (h *Handler) PushTag() {}
 func (h *Handler) GetBuildEnv() string {
 	fmt.Println("check existing build number")
 
-	ev := os.Environ()
-	for _, e := range ev {
-		fmt.Printf("VAR: %s \n", e)
-	}
-	fmt.Println(os.Getenv("GITHUB_ENV"))
 	fmt.Println(os.Getenv("BUILD_NUMBER"))
-
-	envPath := os.Getenv("GITHUB_ENV")
-	file, err := os.ReadFile(envPath)
-	HandleError(err, "open env file")
-
-	fmt.Println("FILEDATA: ", string(file))
 
 	if os.Getenv("BUILD_NUMBER") != "" {
 		return os.Getenv("BUILD_NUMBER")

@@ -16,10 +16,6 @@ inputs:
     required: false
     description: "The build number of the package"
 
-outputs:
-  build_number: 
-    description: "The build number of the package"
-
 runs:
   using: docker
   image: Dockerfile

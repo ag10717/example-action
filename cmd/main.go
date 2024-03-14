@@ -33,6 +33,7 @@ func main() {
 
 	// GET & SET TAG
 	var bn string
+	var ib string
 
 	// // check if the build number has already be injected into the container
 	// // this might happen if you run this action without create_tag; and then run it again with create_tag
@@ -41,16 +42,13 @@ func main() {
 
 	if bn == "" {
 		bn = gh.GetLatestBuild()
-		gh.IncrementBuild(bn, os.Getenv("GITHUB_RUN_ID"))
+		ib = gh.IncrementBuild(bn, os.Getenv("GITHUB_RUN_ID"))
 
-		// os.Setenv("GITHUB_ENV", fmt.Sprintf("BUILD_NUMBER=%s", bn))
-		// fmt.Printf("%s=%s", "BUILD_NUMBER", bn)
-		fmt.Printf("%s=%s", "build_number", bn)
-		pkg.WriteGithubEnvValue("BUILD_NUMBER", bn)
+		pkg.WriteGithubEnvValue("BUILD_NUMBER", ib)
 	}
 
 	// if os.Args[1] == "true" {
-	// 	// gh.SetTag(bn)
+	// 	// gh.SetTag(ib)
 	// 	// gh.PushTag()
 	// }
 }
