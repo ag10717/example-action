@@ -11,6 +11,7 @@ import (
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/go-git/go-git/v5/plumbing/transport/ssh"
 	"github.com/hashicorp/go-version"
 )
 
@@ -81,12 +82,16 @@ func (h *Handler) GetLatestBuild() string {
 func (h *Handler) PushTag(tag string) {
 	fmt.Printf("pushing tag [%s]\n", tag)
 
+	authMethod, err := ssh.DefaultAuthBuilder("git")
+	HandleError(err, "auth builder")
+
 	po := &git.PushOptions{
 		RemoteName: "origin",
 		RefSpecs:   []config.RefSpec{"refs/tags/*:refs/tags/*"},
+		Auth:       authMethod,
 	}
 
-	err := h.Repo.Push(po)
+	err = h.Repo.Push(po)
 
 	if err != nil {
 		if err == git.NoErrAlreadyUpToDate {
