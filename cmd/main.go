@@ -44,6 +44,8 @@ func main() {
 		gh.IncrementBuild(bn, os.Getenv("GITHUB_RUN_ID"))
 
 		os.Setenv("GITHUB_ENV", fmt.Sprintf("BUILD_NUMBER=%s", bn))
+		fmt.Printf("%s=%s", "BUILD_NUMBER", bn)
+		fmt.Printf("echo \"%s=%s\" >> $GITHUB_ENV\n", "BUILD_NUMBER", bn)
 	}
 
 	// if os.Args[1] == "true" {
