@@ -27,16 +27,11 @@ func main() {
 		MajorVersionInput: os.Args[2],
 	}
 
-	c, err := gh.Repo.Config()
-	pkg.HandleError(err, "get config")
-
-	fmt.Println("config: ", c.Raw)
-
 	// GET & SET TAG
 	var bn string
 
-	// // check if the build number has already be injected into the container
-	// // this might happen if you run this action without create_tag; and then run it again with create_tag
+	// check if the build number has already be injected into the container
+	// this might happen if you run this action without create_tag; and then run it again with create_tag
 	bn = gh.GetBuildEnv()
 	pkg.HandleError(err, "get build env")
 

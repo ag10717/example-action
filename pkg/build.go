@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/go-git/go-git/plumbing/transport/http"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
@@ -84,6 +85,10 @@ func (h *Handler) PushTag(tag string) {
 	po := &git.PushOptions{
 		RemoteName: "origin",
 		RefSpecs:   []config.RefSpec{"refs/tags/*:refs/tags/*"},
+		Auth: &http.BasicAuth{
+			Username: "github-action",
+			Password: os.Getenv("GITHUB_TOKEN"),
+		},
 	}
 
 	err := h.Repo.Push(po)
