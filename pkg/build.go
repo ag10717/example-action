@@ -47,7 +47,7 @@ func (h *Handler) IncrementBuild(tag, run_id string) string {
 		buildNumber = fmt.Sprintf("%s.%s", buildNumber, fmt.Sprintf("PREVIEW-%s", run_id))
 	}
 
-	fmt.Printf("incrementing tag too: %s", buildNumber)
+	fmt.Printf("incrementing tag to: %s", buildNumber)
 	return buildNumber
 }
 
