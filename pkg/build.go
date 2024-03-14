@@ -10,6 +10,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/hashicorp/go-version"
 )
 
@@ -59,6 +60,10 @@ func (h *Handler) SetTag(tag string) {
 
 	_, err = h.Repo.CreateTag(tag, head.Hash(), &git.CreateTagOptions{
 		Message: tag,
+		Tagger: &object.Signature{
+			Name:  "github-actions",
+			Email: "github-actions@actions.com",
+		},
 	})
 
 	HandleError(err, "create tag")
