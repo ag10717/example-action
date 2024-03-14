@@ -34,9 +34,10 @@ func main() {
 		MajorVersionInput: os.Args[2],
 	}
 
-	gh.Repo.Fetch(&git.FetchOptions{
+	err = gh.Repo.Fetch(&git.FetchOptions{
 		Tags: git.AllTags,
 	})
+	pkg.HandleError(err, "fetch tags")
 
 	// GET & SET TAG
 	var bn string
