@@ -81,6 +81,12 @@ func (h *Handler) GetBuildEnv() string {
 	fmt.Println(os.Getenv("GITHUB_ENV"))
 	fmt.Println(os.Getenv("BUILD_NUMBER"))
 
+	envPath := os.Getenv("GITHUB_ENV")
+	file, err := os.ReadFile(envPath)
+	HandleError(err, "open env file")
+
+	fmt.Println("FILEDATA: ", string(file))
+
 	if os.Getenv("BUILD_NUMBER") != "" {
 		return os.Getenv("BUILD_NUMBER")
 	}
