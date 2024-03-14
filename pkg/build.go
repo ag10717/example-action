@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-git/go-git/plumbing/transport/http"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/hashicorp/go-version"
 )
 
