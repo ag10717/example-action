@@ -95,10 +95,10 @@ func (h *Handler) PushTag(tag string) {
 func (h *Handler) GetBuildEnv() string {
 	fmt.Println("check existing build number")
 
-	fmt.Println(os.Getenv("BUILD_NUMBER"))
+	fmt.Println(strings.TrimSpace(os.Getenv("BUILD_NUMBER")))
 
 	if os.Getenv("BUILD_NUMBER") != "" {
-		return os.Getenv("BUILD_NUMBER")
+		return strings.TrimSpace(os.Getenv("BUILD_NUMBER"))
 	}
 
 	return ""

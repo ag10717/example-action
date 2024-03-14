@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/ag10717/example-action/pkg"
 	"github.com/go-git/go-git/v5"
@@ -28,10 +27,6 @@ func main() {
 		MajorVersionInput: os.Args[2],
 	}
 
-	rem, err := gh.Repo.Remote("origin")
-	pkg.HandleError(err, "get remote")
-	fmt.Println(rem.Config().URLs)
-
 	// GET & SET TAG
 	var bn string
 
@@ -42,7 +37,7 @@ func main() {
 
 	if bn == "" {
 		bn = gh.GetLatestBuild()
-		bn = gh.IncrementBuild(strings.TrimSpace(bn), os.Getenv("GITHUB_RUN_ID"))
+		bn = gh.IncrementBuild(bn, os.Getenv("GITHUB_RUN_ID"))
 	}
 
 	pkg.WriteGithubEnvValue("BUILD_NUMBER", bn)
