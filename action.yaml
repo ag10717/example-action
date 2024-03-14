@@ -15,7 +15,7 @@ inputs:
   token:
     required: false
     description: "The token to use for the push action"
-    default: ${{ github.token}}
+    default: ${{ github.token }}
 
 runs:
   using: docker
@@ -23,3 +23,4 @@ runs:
   args:
     - ${{ inputs.create_tag }}
     - ${{ inputs.major_version }}
+    - ${{ inputs.token }}
