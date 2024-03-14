@@ -76,7 +76,7 @@ func (h *Handler) GetBuildEnv() string {
 
 	ev := os.Environ()
 	for _, e := range ev {
-		fmt.Printf("VAR: %s", e)
+		fmt.Printf("VAR: %s \n", e)
 	}
 	fmt.Println(os.Getenv("GITHUB_ENV"))
 	fmt.Println(os.Getenv("BUILD_NUMBER"))
