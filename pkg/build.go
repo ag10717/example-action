@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/hashicorp/go-version"
 )
@@ -73,6 +74,7 @@ func (h *Handler) GetLatestBuild() string {
 func (h *Handler) PushTag(tag string) {
 	po := &git.PushOptions{
 		RemoteName: "origin",
+		RefSpecs:   []config.RefSpec{"refs/tags/*:refs/tags/*"},
 	}
 
 	err := h.Repo.Push(po)
