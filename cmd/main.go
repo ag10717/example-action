@@ -49,6 +49,6 @@ func main() {
 
 	if os.Args[1] == "true" {
 		gh.SetTag(ib)
-		gh.PushTag()
+		gh.PushTag(ib)
 	}
 }

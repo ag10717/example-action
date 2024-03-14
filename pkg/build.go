@@ -70,7 +70,22 @@ func (h *Handler) GetLatestBuild() string {
 	return latestTag
 }
 
-func (h *Handler) PushTag() {}
+func (h *Handler) PushTag(tag string) {
+	po := &git.PushOptions{
+		RemoteName: "origin",
+	}
+
+	err := h.Repo.Push(po)
+
+	if err != nil {
+		if err == git.NoErrAlreadyUpToDate {
+			fmt.Printf("tag [%s] already pushed \n", tag)
+		}
+
+		HandleError(err, "push tag")
+	}
+}
+
 func (h *Handler) GetBuildEnv() string {
 	fmt.Println("check existing build number")
 
