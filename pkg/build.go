@@ -52,6 +52,8 @@ func (h *Handler) IncrementBuild(tag, run_id string) string {
 }
 
 func (h *Handler) SetTag(tag string) {
+	fmt.Printf("setting tag value [%s]\n", tag)
+
 	head, err := h.Repo.Head()
 	HandleError(err, "get head")
 
@@ -72,6 +74,8 @@ func (h *Handler) GetLatestBuild() string {
 }
 
 func (h *Handler) PushTag(tag string) {
+	fmt.Printf("pushing tag [%s]\n", tag)
+
 	po := &git.PushOptions{
 		RemoteName: "origin",
 		RefSpecs:   []config.RefSpec{"refs/tags/*:refs/tags/*"},
