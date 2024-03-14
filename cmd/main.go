@@ -27,6 +27,11 @@ func main() {
 		MajorVersionInput: os.Args[2],
 	}
 
+	c, err := gh.Repo.Config()
+	pkg.HandleError(err, "get config")
+
+	fmt.Println("config: ", c.Raw)
+
 	// GET & SET TAG
 	var bn string
 
