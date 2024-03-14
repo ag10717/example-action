@@ -25,6 +25,7 @@ func main() {
 		Repo:              r,
 		BranchNameInput:   os.Getenv("GITHUB_REF"),
 		MajorVersionInput: os.Args[2],
+		Token:             os.Args[3],
 	}
 
 	// print vars

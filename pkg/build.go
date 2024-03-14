@@ -19,6 +19,7 @@ type Handler struct {
 	Repo              *git.Repository
 	BranchNameInput   string
 	MajorVersionInput string
+	Token             string
 }
 
 func (h *Handler) IncrementBuild(tag, run_id string) string {
@@ -87,7 +88,7 @@ func (h *Handler) PushTag(tag string) {
 		RefSpecs:   []config.RefSpec{"refs/tags/*:refs/tags/*"},
 		Auth: &http.BasicAuth{
 			Username: "github-action",
-			Password: os.Args[3],
+			Password: h.Token,
 		},
 	}
 
